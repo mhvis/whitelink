@@ -21,9 +21,14 @@ Web interface features:
 
 ## I'm a streamer!
 
-I will gladly setup a _beefy_ Crewlink+Impostor server for you in your cloud region of choice (e.g. US West) for free! I have capacity for a couple of cloud server instances which were provided to me for free in Microsoft Azure. DM me on Twitter or Discord or send a mail to _todo_! You will receive the server address of your private server within a couple of hours.
+I will gladly setup a beefy Crewlink+Impostor server for you in your cloud region of choice (e.g. US West) for free! DM me on Twitter or Discord or send a mail to _todo_! You will receive the server address of your private server within a couple of hours.
 
 
 ## Demo
 
 _TODO_
+
+
+## Development
+
+A Docker compose file is available for local development, it runs the server on port 8000.

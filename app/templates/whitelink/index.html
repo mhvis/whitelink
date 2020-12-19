@@ -1,0 +1,60 @@
+{% extends "whitelink/base.html" %}
+
+{% block content %}
+    <div class="card text-center mt-5">
+        <div class="card-body">
+            {% if entry %}
+                <p><i class="far fa-check-circle fa-2x text-success"></i></p>
+                <h5 class="card-text">You're all set!</h5>
+                <p class="card-text">Your IP is whitelisted and you can access the server</p>
+            {% else %}
+                <p><i class="far fa-times-circle fa-2x text-danger"></i></p>
+                <h5 class="card-text">You're not whitelisted</h5>
+                <p class="card-text">To whitelist your IP, enter your access code below</p>
+            {% endif %}
+        </div>
+    </div>
+
+    {% if not entry %}
+        <h3 class="mt-5">Whitelist me</h3>
+        <p>Have an access code? Paste it here to whitelist your IP</p>
+        <form action="{% url 'index' %}" method="post">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-sm-4">
+                    <input type="password" class="form-control" placeholder="Access code" name="code" required>
+                </div>
+                <div class="col-sm-5">
+                    <input type="text" maxlength="100" class="form-control" placeholder="Player name" name="name"
+                           required>
+                </div>
+                <div class="col-sm-3">
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary">Whitelist</button>
+                    </div>
+                </div>
+            </div>
+            {{ form.non_field_errors }}
+            {{ form.code.errors }}
+            {{ form.name.errors }}
+        </form>
+    {% endif %}
+    <p>IP: {{ ip }}</p>
+    <h3 class="mt-5">Server usage</h3>
+
+    <p>When you're whitelisted, connect using the server address:</p>
+    <ul>
+        <li>CrewLink:</li>
+        <li>Impostor:</li>
+    </ul>
+    <p>For more detailed instructions, see here</p>
+
+    {% if entry %}
+        <h3 class="mt-5">Whitelist</h3>
+        <ul>
+        {% for e in all_entries %}
+            <li>{{ e.friendly_name }} Admin? {{ e.is_admin }}</li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+{% endblock %}
