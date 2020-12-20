@@ -59,6 +59,8 @@ services:
       - html:/usr/share/nginx/html
       - acme:/etc/acme.sh
     restart: always
+    depends_on:
+      - proxy
   crewlink:
     image: ottomated/crewlink-server:latest
     # Entrypoint is used to create symlinks for the certificate.
