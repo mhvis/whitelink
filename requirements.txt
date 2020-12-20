@@ -5,8 +5,13 @@
 #    pip-compile
 #
 asgiref==3.3.1            # via django
+certifi==2020.12.5        # via requests
+chardet==4.0.0            # via requests
 django-environ==0.4.5     # via -r requirements.in
 django-ipware==3.0.2      # via -r requirements.in
 django==3.1.4             # via -r requirements.in
+idna==2.10                # via requests
 pytz==2020.4              # via django
+requests==2.25.1          # via -r requirements.in
 sqlparse==0.4.1           # via django
+urllib3==1.26.2           # via requests

@@ -1,34 +1,51 @@
 # Whitelink
 
-The aim of this project is to provide a private server instance which is only accessible for whitelisted IP addresses, and allow easy registration of the server users (players) using a web interface.
+The aim of this project is to provide a private server instance which is only accessible for whitelisted IP addresses, and allow easy registration of the server users using a web interface.
 
-It can be used to provide private Impostor and Crewlink server instances with the following benefits for streamers:
+It provides private Impostor and Crewlink server instances which can only be accessed by the whitelisted people,
+giving the following benefits for streamers:
 
-* Low ping and high availability because there are no other players. Works even when the public Among Us or Crewlink servers are down.
-* No risk of leaking lobby codes, heck you can even set the lobby to public, because only whitelisted people can access and see the lobby anyway. (Assuming you use the Impostor server.)
-* No risk in leaking the Crewlink/Impostor server address, as only whitelisted people can use the server.
+* Low ping and high availability, works even when the public Among Us or Crewlink servers are down.
+* No risk of leaking lobby codes, you can even set the lobby to public.
+* No risk of leaking the Crewlink+Impostor server address.
 
 ## How does it work?
 
-Access to the server is restricted on the basis of IP address, using a firewall. This tool provides a web interface which lets players register their IP address in the whitelist, using a private code received from the host. This needs to be done only once for each player, after which they can access the private server indefinitely.
+One-time set up:
 
-Web interface features:
+1. The host shares the private code with the other players.
+2. The others open this app in their browser and fill in the code to whitelist their IP.
+   
+After set up the whitelisted people can access Crewlink and Impostor.
 
-* Directly see if you have access, i.e. if your IP is whitelisted.
-* Host can grant access using a private code or secret URL.
-* Host can view and revoke whitelisted people.
+## Are you a streamer?
 
-
-## I'm a streamer!
-
-I will gladly setup a beefy Crewlink+Impostor server for you in your cloud region of choice (e.g. US West) for free! DM me on Twitter or Discord or send a mail to _todo_! You will receive the server address of your private server within a couple of hours.
-
+I will gladly set up a beefy CrewLink+Impostor server for you in a nearby cloud region for free!
+DM me on Twitter or Discord or send a mail to _todo_!
 
 ## Demo
 
 _TODO_
 
 
+
 ## Development
 
-A Docker compose file is available for local development, it runs the server on port 8000.
+### Local installation
+
+1. Create virtual environment
+2. `pip install -r requirements.txt`
+3. Set configuration environment variables, see `whitelink/settings.py`
+4. `python manage.py runserver`
+
+### Using Docker Compose
+
+```shell
+$ docker-compose build
+$ docker-compose up
+```
+
+
+## Deployment
+
+See `deploy/stack.yml` for a Docker stack which includes CrewLink, Impostor and HTTPS support.

@@ -39,22 +39,74 @@
             {{ form.name.errors }}
         </form>
     {% endif %}
-    <p>IP: {{ ip }}</p>
-    <h3 class="mt-5">Server usage</h3>
-
-    <p>When you're whitelisted, connect using the server address:</p>
-    <ul>
-        <li>CrewLink:</li>
-        <li>Impostor:</li>
-    </ul>
-    <p>For more detailed instructions, see here</p>
+    {#    <p>IP: {{ ip }}</p>#}
 
     {% if entry %}
-        <h3 class="mt-5">Whitelist</h3>
+        <h3 class="mt-5">Server usage</h3>
+
+        <p>How to connect:</p>
         <ul>
-        {% for e in all_entries %}
-            <li>{{ e.friendly_name }} Admin? {{ e.is_admin }}</li>
-        {% endfor %}
+            <li>CrewLink:</li>
+            <li>Impostor:</li>
         </ul>
+        <p>More detailed instructions</p>
+        <h3 class="mt-5">Whitelist entries</h3>
+
+        <p>
+            People in whitelist: 1 / 20
+        </p>
+
+        <form action="{% url 'index' %}" method="post">
+            <table class="table align-middle">
+                <thead>
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Added at</th>
+                    {% if entry.is_admin %}
+                        <th scope="col"></th>
+                    {% endif %}
+                </tr>
+                </thead>
+                <tbody>
+                {% for e in all_entries %}
+                    <tr>
+                        <td>
+                            {{ e.friendly_name }}
+                            {% if e.is_admin %}<i class="fas fa-user-cog"></i>{% endif %}
+
+                        </td>
+                        <td>{{ e.created_at }}</td>
+                        {% if entry.is_admin %}
+                            <td class="text-end">
+                                <button type="submit" name="revoke" value="{{ e.pk }}"
+                                        class="btn btn-sm btn-danger ml-auto" data-bs-toggle="tooltip"
+                                        title="Revoke access" {% if entry == e %}disabled{% endif %}>
+                                    <i class="fas fa-ban"></i>
+                                </button>
+                            </td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </form>
+
+        <div class="row">
+        <div class="col-auto">
+        <a href="" class="btn btn-warning" data-bs-toggle="tooltip"
+                   title="Disables the current code and generates a new one">Invalidate access code</a>
+
+        </div>
+            <div class="col-auto">
+        <div class="input-group">
+            <input class="form-control" type="text" value="thisisthecodeanditisverylongisitisitreally" readonly
+                   id="codeField">
+            <button class="btn btn-secondary clip" type="button" data-clipboard-target="#codeField" title="Copied">
+                <i class="fas fa-copy"></i> Copy
+            </button>
+        </div>
+            </div>
+        </div>
+
     {% endif %}
 {% endblock %}

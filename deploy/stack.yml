@@ -1,0 +1,96 @@
+# A production-ready example Docker stack with Crewlink and Impostor included
+
+version: '3.8'
+
+services:
+  whitelink:
+    image: mhvis/whitelink:latest
+    environment:
+      # Domain name
+      - VIRTUAL_HOST=
+      - VIRTUAL_PORT=8000
+      # Domain name
+      - LETSENCRYPT_HOST=
+      # Application settings, see whitelink/settings.py
+      - SECRET_KEY=
+      - ALLOWED_HOSTS=
+      - DATABASE_URL=postgres://whitelink:whitelink@db/whitelink
+      # E-mail sending configuration, used for sending error reports to
+      # - EMAIL_URL=
+      - ALLOW_PORTS=8443,8080,22023
+      - RULE_UPDATER=
+      # Specific rule updater settings
+      - AZURE=
+    restart: always
+  db:
+    image: postgres:13
+    environment:
+      - POSTGRES_PASSWORD=whitelink
+      - POSTGRES_USER=whitelink
+      - POSTGRES_DB=whitelink
+    volumes:
+      - db:/var/lib/postgresql/data
+    restart: always
+  proxy:
+    image: jwilder/nginx-proxy:latest
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      # These volumes are for nginx-proxy-letsencrypt
+      - certs:/etc/nginx/certs
+      - vhosts:/etc/nginx/vhost.d
+      - html:/usr/share/nginx/html
+    restart: always
+  letsencrypt:
+    image: jrcs/letsencrypt-nginx-proxy-companion:latest
+    environment:
+      # E-mail used for Let's Encrypt certificate notifications
+      - DEFAULT_EMAIL=
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - certs:/etc/nginx/certs
+      - vhosts:/etc/nginx/vhost.d
+      - html:/usr/share/nginx/html
+      - acme:/etc/acme.sh
+    restart: always
+  crewlink:
+    image: ottomated/crewlink-server:latest
+    environment:
+      # Domain name
+      - ADDRESS=
+      # CrewLink instance name
+      - NAME=
+      - HTTPS=1
+      - SSLPATH=/letsencrypt
+    ports:
+      # We can't use 443 here because it's already in use by Whitelink.
+      #
+      # A different solution would be to use a different domain for CrewLink and use the Nginx proxy virtual host
+      # capabilities.
+      - 8443:443
+    restart: always
+  impostor:
+    image: aeonlucid/impostor:nightly
+    ports:
+      - 22023:22023/udp
+    volumes:
+      - ./impostor-config.json:/app/config.json
+    restart: always
+  demo:
+    image: nginx:alpine
+    volumes:
+      - ./demo:/usr/share/nginx/html:ro
+    ports:
+      - 8080:80
+    restart: always
+
+volumes:
+  # Volumes used by nginx-proxy
+  certs:
+  vhosts:
+  html:
+  acme:
+  # For Whitelink database
+  db:

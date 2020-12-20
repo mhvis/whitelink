@@ -2,6 +2,8 @@ from django import forms
 from django.conf import settings
 from django.core.exceptions import ValidationError
 
+from app.models import WhitelistSettings
+
 
 class WhitelistForm(forms.Form):
     code = forms.CharField(max_length=100)
@@ -10,7 +12,7 @@ class WhitelistForm(forms.Form):
     def clean(self):
         code = self.cleaned_data.get('code')
 
-        if code != settings.ACCESS_CODE:
+        if code != WhitelistSettings.get().code:
             raise ValidationError("Access code is invalid.")
 
         return self.cleaned_data

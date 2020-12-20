@@ -1,10 +1,13 @@
+from django.contrib import messages
 from django.core.exceptions import PermissionDenied
+from django.db import transaction
 from django.shortcuts import redirect
 from django.views.generic import TemplateView
 from ipware import get_client_ip
 
 from app.forms import WhitelistForm
 from app.models import WhitelistEntry
+from app.update import update_firewall
 
 
 class WhitelistMixin:
@@ -45,14 +48,21 @@ class IndexView(WhitelistMixin, TemplateView):
     def post(self, request, *args, **kwargs):
         """This validates the whitelist add form."""
         if self.entry:
+            # IP is already whitelisted
             raise PermissionDenied
 
         form = WhitelistForm(request.POST)
 
         if form.is_valid():
-            WhitelistEntry.objects.create(ip=self.ip,
-                                          friendly_name=form.cleaned_data.get('name'),
-                                          is_admin=True)
+            with transaction.atomic():
+                # Set as admin if it's the first entry
+                admin = WhitelistEntry.objects.count() == 0
+                WhitelistEntry.objects.create(ip=self.ip,
+                                              friendly_name=form.cleaned_data.get('name'),
+                                              is_admin=admin)
+                # Update in same transaction to make sure that entry is not saved when firewall fails
+                update_firewall()
+            messages.success(request, "You can now access the server!")
             return redirect('index')
 
         context = self.get_context_data(**kwargs)
