@@ -3,6 +3,6 @@
 # fullchain.pem, pointing to the location where letsencrypt-nginx-proxy stores
 # them.
 set -e
-ln -s /certs/$ADDRESS/fullchain.pem /app/fullchain.pem
-ln -s /certs/$ADDRESS/key.pem /app/privkey.pem
+ln -s -f /certs/$ADDRESS/fullchain.pem /app/fullchain.pem
+ln -s -f /certs/$ADDRESS/key.pem /app/privkey.pem
 exec "$@"
