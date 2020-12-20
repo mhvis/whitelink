@@ -43,6 +43,8 @@ services:
       - vhosts:/etc/nginx/vhost.d
       - html:/usr/share/nginx/html
     restart: always
+    labels:
+      - com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy
   letsencrypt:
     image: jrcs/letsencrypt-nginx-proxy-companion:latest
     environment:
@@ -63,13 +65,15 @@ services:
       # CrewLink instance name
       - NAME=
       - HTTPS=1
-      - SSLPATH=/letsencrypt
+      #- SSLPATH=/letsencrypt
     ports:
       # We can't use 443 here because it's already in use by Whitelink.
       #
       # A different solution would be to use a different domain for CrewLink and use the Nginx proxy virtual host
       # capabilities.
       - 8443:443
+    volumes:
+      - certs:/certs:ro
     restart: always
   impostor:
     image: aeonlucid/impostor:nightly
