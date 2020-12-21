@@ -18,4 +18,5 @@ class WhitelistSettings(models.Model):
     @classmethod
     def get(cls):
         """Returns the whitelist settings instance."""
-        return cls.objects.get_or_create(pk=1)
+        obj, created = cls.objects.get_or_create(pk=1)
+        return obj
