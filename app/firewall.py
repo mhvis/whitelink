@@ -9,6 +9,7 @@ from typing import List
 import requests
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
+from requests import HTTPError
 
 
 class BaseRuleUpdater:
@@ -159,5 +160,10 @@ class AzureRuleUpdater(BaseRuleUpdater):
             'location': nsg['location'],
         }
         r = requests.put(self.get_network_security_group_url(), json=body, auth=self.auth)
-        r.raise_for_status()
+        try:
+            r.raise_for_status()
+        except HTTPError as e:
+            # Ugly: reraise HTTPError such that it includes the response body
+            msg = "{}\n{}".format(str(e), e.response.text)
+            raise HTTPError(msg, response=e.response)
         return r.json()
