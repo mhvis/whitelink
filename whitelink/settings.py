@@ -1,3 +1,4 @@
+from email.utils import getaddresses
 from pathlib import Path
 import environ
 
@@ -99,6 +100,14 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# E-mail settings
+
+EMAIL_CONFIG = env.email_url('EMAIL_URL', default='smtp://')
+vars().update(EMAIL_CONFIG)
+# ADMINS=Full Name <email-with-name@example.com>,anotheremailwithoutname@example.com
+ADMINS = getaddresses([env('ADMINS', default='')])
+
 
 # The destination ports that will be allowed on the firewall rules
 ALLOW_PORTS = env.list('ALLOW_PORTS', cast=int, default=[9736, 22023])

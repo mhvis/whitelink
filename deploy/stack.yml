@@ -16,7 +16,8 @@ services:
       - ALLOWED_HOSTS=
       - DATABASE_URL=postgres://whitelink:whitelink@db/whitelink
       # E-mail sending configuration, used for sending error reports to
-      # - EMAIL_URL=
+      - EMAIL_URL=
+      - ADMINS=
       - ALLOW_PORTS=8443,8080,22023
       - RULE_UPDATER=
       # Specific rule updater settings
