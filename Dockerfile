@@ -17,6 +17,8 @@ COPY . /app
 RUN useradd -u 1001 appuser
 USER appuser
 
+EXPOSE 8000
+
 # The entrypoint is used to migrate upon start
 ENTRYPOINT ["/app/entrypoint.sh"]
 

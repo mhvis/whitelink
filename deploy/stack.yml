@@ -67,6 +67,8 @@ services:
     #
     # Possibly cleaner would be to build an image with this included.
     entrypoint: ["/entrypoint.sh"]
+    # We need to put the default command in here because we changed the entrypoint
+    command: ["node", "dist/index.js"]
     environment:
       # Domain name
       - ADDRESS=
