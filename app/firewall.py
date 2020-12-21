@@ -130,7 +130,7 @@ class AzureRuleUpdater(BaseRuleUpdater):
                     'access': 'Allow',
                     'destinationPortRanges': [str(p) for p in settings.ALLOW_PORTS],
                     'sourcePortRange': '*',
-                    'priority': 300,
+                    'priority': 1234,
                     'direction': 'Inbound',
                     'description': "This rule is automatically configured using Whitelink.",
                 },
