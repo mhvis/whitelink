@@ -1,5 +1,7 @@
 from email.utils import getaddresses
 from pathlib import Path
+
+import dj_email_url
 import environ
 
 from app.firewall import BaseRuleUpdater, AzureRuleUpdater
@@ -103,8 +105,9 @@ STATIC_URL = '/static/'
 
 # E-mail settings
 
-EMAIL_CONFIG = env.email_url('EMAIL_URL', default='smtp://')
-vars().update(EMAIL_CONFIG)
+# I prefer dj-email-url over django-environ
+email_config = dj_email_url.parse(env('EMAIL_URL', default='smtp://'))
+vars().update(email_config)
 # ADMINS=Full Name <email-with-name@example.com>,anotheremailwithoutname@example.com
 ADMINS = getaddresses([env('ADMINS', default='')])
 
