@@ -8,7 +8,7 @@ People that want access to the server visit the web page of this tool where they
 
 The original purpose is for providing private Impostor and Crewlink server instances, with the following benefits for streamers:
 
-* Low ping and high availability, works even when the public Among Us or Crewlink servers are down.
+* Low ping and high availability, works even when the public Among Us or Crewlink servers are down. (Ping depends on geographical location of the server.)
 * No risk of leaking lobby codes, you can even set the lobby to public.
 * No risk of leaking the Crewlink+Impostor server address.
 
@@ -52,3 +52,10 @@ $ docker-compose up
 ## Deployment
 
 See `deploy/stack.yml` for a Docker stack which includes CrewLink, Impostor and HTTPS support.
+
+## Credits
+
+Great projects:
+
+* [CrewLink](https://github.com/ottomated/CrewLink-server) by Ottomated
+* [Impostor](https://github.com/Impostor/Impostor) by AeonLucid
