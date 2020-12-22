@@ -42,14 +42,7 @@
     {#    <p>IP: {{ ip }}</p>#}
 
     {% if entry %}
-        <h3 class="mt-5">Server usage</h3>
-
-        <p>How to connect:</p>
-        <ul>
-            <li>CrewLink:</li>
-            <li>Impostor:</li>
-        </ul>
-        <p>More detailed instructions</p>
+        {% include 'whitelink/server_usage.html' %}
         <h3 class="mt-5">Whitelist entries</h3>
 
         <p>
@@ -108,5 +101,9 @@
             </div>
         </div>
 
+        <form action="{% url 'revoke-self' %}" method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Revoke your access</button>
+        </form>
     {% endif %}
 {% endblock %}

@@ -1,11 +1,10 @@
 from django import forms
-from django.conf import settings
 from django.core.exceptions import ValidationError
 
 from app.models import WhitelistSettings
 
 
-class WhitelistForm(forms.Form):
+class WhitelistAddForm(forms.Form):
     code = forms.CharField(max_length=100)
     name = forms.CharField(max_length=100)
 

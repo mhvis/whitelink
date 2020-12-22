@@ -9,7 +9,7 @@ from typing import List
 import requests
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
-from requests import HTTPError
+from requests import HTTPError, Response
 
 
 class BaseRuleUpdater:
@@ -31,6 +31,16 @@ class BaseRuleUpdater:
         parameters.
         """
         return cls()
+
+
+def raise_for_status(r: Response):
+    """Raises exception for HTTP 4XX or 5XX status codes."""
+    # Overrides Response.raise_for_status() to include the response body.
+    try:
+        r.raise_for_status()
+    except HTTPError as e:
+        msg = "{}\n{}".format(str(e), e.response.text)
+        raise HTTPError(msg, response=e.response)
 
 
 class AzureRuleUpdater(BaseRuleUpdater):
@@ -160,10 +170,17 @@ class AzureRuleUpdater(BaseRuleUpdater):
             'location': nsg['location'],
         }
         r = requests.put(self.get_network_security_group_url(), json=body, auth=self.auth)
-        try:
-            r.raise_for_status()
-        except HTTPError as e:
-            # Ugly: reraise HTTPError such that it includes the response body
-            msg = "{}\n{}".format(str(e), e.response.text)
-            raise HTTPError(msg, response=e.response)
+        raise_for_status(r)
         return r.json()
+
+
+_rule_updater_choices = {
+    'base': BaseRuleUpdater,
+    'azure': AzureRuleUpdater
+}
+
+
+def whitelist_ips(ips: List[str]):
+    """Whitelists given IPs using the rule updater set in the configuration."""
+    updater = _rule_updater_choices[settings.RULE_UPDATER].from_settings()
+    updater.update(ips)

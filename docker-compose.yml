@@ -4,8 +4,8 @@ version: '3.7'
 services:
   whitelink:
     build: .
-    # Custom command which adds --reload
-    command: ["gunicorn", "-w", "3", "-b", "0.0.0.0:8000", "--reload", "whitelink.wsgi"]
+    # Uses --reload for development
+    command: ["gunicorn", "-w", "1", "-b", "0.0.0.0:8000", "--reload", "whitelink.wsgi"]
     environment:
       DEBUG: "on"
       SECRET_KEY: helloworld

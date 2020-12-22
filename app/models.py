@@ -1,6 +1,20 @@
 from django.core.validators import MinValueValidator, MaxValueValidator
-from django.db import models
+from django.db import models, transaction
 from django.utils import timezone
+
+from app.firewall import whitelist_ips
+
+
+class WhitelistEntryManager(models.Manager):
+    def update_firewall(self):
+        """Updates the firewall with all IPs in the database."""
+        whitelist_ips([e.ip for e in self.all()])
+
+    def add(self, **kwargs):
+        """Creates a new entry with given parameters and updates the firewall."""
+        with transaction.atomic():
+            self.create(**kwargs)
+            self.update_firewall()
 
 
 class WhitelistEntry(models.Model):
@@ -9,6 +23,14 @@ class WhitelistEntry(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
 
     is_admin = models.BooleanField(default=False)  # Currently not used
+
+    objects = WhitelistEntryManager()
+
+    def revoke(self):
+        """Deletes entry and synchronously updates firewall."""
+        with transaction.atomic():
+            self.delete()
+            self.objects.update_firewall()
 
 
 class WhitelistSettings(models.Model):
