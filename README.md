@@ -1,5 +1,7 @@
 # Whitelink
 
+[![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/mhvis/whitelink)](https://hub.docker.com/r/mhvis/whitelink)
+
 A tool for restricting server access using an IP based whitelist.
 
 People that want access to the server visit the web page of this tool where they enter the retrieved access code, after which their IP address is added to the firewall granting access to the service.
