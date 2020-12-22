@@ -1,14 +1,13 @@
 from django.conf import settings
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
-from django.db import transaction
 from django.shortcuts import redirect, get_object_or_404
 from django.views import View
 from django.views.generic import TemplateView
 from ipware import get_client_ip
 
 from app.forms import WhitelistAddForm
-from app.models import WhitelistEntry
+from app.models import WhitelistEntry, WhitelistSettings
 
 
 class WhitelistMixin:
@@ -48,6 +47,8 @@ class IndexView(WhitelistMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         context.update({
             'all_entries': WhitelistEntry.objects.all(),
+            'whitelist_settings': WhitelistSettings.get(),
+            'usage': settings.USAGE_INSTRUCTIONS,
         })
         return context
 
@@ -61,10 +62,8 @@ class IndexView(WhitelistMixin, TemplateView):
 
         if form.is_valid():
             # Set as admin if it's the first entry
-            admin = WhitelistEntry.objects.count() == 0
-            WhitelistEntry.objects.add(ip=self.ip,
-                                       friendly_name=form.cleaned_data.get('name'),
-                                       is_admin=admin)
+            is_admin = WhitelistEntry.objects.count() == 0
+            form.add(ip=self.ip, is_admin=is_admin)
             messages.success(request, "You can now access the server!")
             return redirect('index')
 
@@ -95,5 +94,5 @@ class RevokeView(WhitelistMixin, View):
             obj.revoke()
 
         msg = "Your IP is removed from the whitelist." if entry_id is None else "User is removed from the whitelist."
-        messages.success(request, msg)
+        messages.info(request, msg)
         return redirect('index')

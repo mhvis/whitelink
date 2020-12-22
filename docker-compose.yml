@@ -5,10 +5,9 @@ services:
   whitelink:
     build: .
     # Uses --reload for development
-    command: ["gunicorn", "-w", "1", "-b", "0.0.0.0:8000", "--reload", "whitelink.wsgi"]
+    command: ["gunicorn", "-w", "2", "-b", "0.0.0.0:8000", "--reload", "whitelink.wsgi"]
     environment:
       DEBUG: "on"
-      SECRET_KEY: helloworld
       DATABASE_URL: postgres://whitelink:whitelink@db/whitelink
     volumes:
     - .:/app

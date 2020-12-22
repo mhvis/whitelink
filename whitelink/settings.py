@@ -111,9 +111,10 @@ vars().update(email_config)
 # ADMINS=Full Name <email-with-name@example.com>,anotheremailwithoutname@example.com
 ADMINS = getaddresses([env('ADMINS', default='')])
 
-
 # The destination ports that will be allowed on the firewall rules
 ALLOW_PORTS = env.list('ALLOW_PORTS', cast=int, default=[9736, 22023])
+
+USAGE_INSTRUCTIONS = env('USAGE_INSTRUCTIONS', default='<em>Client set up instructions here</em>')
 
 # The rule updater class to use, should be either 'base' (no-op) or 'azure'
 RULE_UPDATER = env('RULE_UPDATER', default='base')

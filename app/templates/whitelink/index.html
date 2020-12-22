@@ -1,7 +1,7 @@
 {% extends "whitelink/base.html" %}
 
 {% block content %}
-    <div class="card text-center mt-5">
+    <div class="card text-center">
         <div class="card-body">
             {% if entry %}
                 <p><i class="far fa-check-circle fa-2x text-success"></i></p>
@@ -16,7 +16,8 @@
     </div>
 
     {% if not entry %}
-        <h3 class="mt-5">Whitelist me</h3>
+        {# Not whitelisted #}
+        <h3 class="mt-4">Whitelist me</h3>
         <p>Have an access code? Paste it here to whitelist your IP</p>
         <form action="{% url 'index' %}" method="post">
             {% csrf_token %}
@@ -38,15 +39,15 @@
             {{ form.code.errors }}
             {{ form.name.errors }}
         </form>
-    {% endif %}
-    {#    <p>IP: {{ ip }}</p>#}
+    {% else %}
+        {# Whitelisted #}
+        <h3 class="mt-4">Usage instructions</h3>
+        {{ usage|safe }}
 
-    {% if entry %}
-        {% include 'whitelink/server_usage.html' %}
-        <h3 class="mt-5">Whitelist entries</h3>
+        <h3 class="mt-4">Whitelist entries</h3>
 
         <p>
-            People in whitelist: 1 / 20
+            People in whitelist: {{ all_entries.count }} / {{ whitelist_settings.max_entries }}
         </p>
 
         <form action="{% url 'index' %}" method="post">
@@ -85,25 +86,32 @@
         </form>
 
         <div class="row">
-        <div class="col-auto">
-        <a href="" class="btn btn-warning" data-bs-toggle="tooltip"
-                   title="Disables the current code and generates a new one">Invalidate access code</a>
-
-        </div>
-            <div class="col-auto">
-        <div class="input-group">
-            <input class="form-control" type="text" value="thisisthecodeanditisverylongisitisitreally" readonly
-                   id="codeField">
-            <button class="btn btn-secondary clip" type="button" data-clipboard-target="#codeField" title="Copied">
-                <i class="fas fa-copy"></i> Copy
-            </button>
-        </div>
+            <label class="col-sm-2 col-form-label" for="codeField">Access code</label>
+            <div class="col-sm-4">
+                <div class="input-group">
+                    <input class="form-control" type="text" value="{{ whitelist_settings.code }}" readonly
+                           id="codeField">
+                    <button class="btn btn-secondary clip" type="button" data-clipboard-target="#codeField"
+                            title="Copied">
+                        <i class="fas fa-copy"></i> Copy
+                    </button>
+                </div>
+            </div>
+            <div class="col">
+                <form action="{% url 'revoke-self' %}" method="post" class="mt-1 mt-sm-0">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Revoke your access</button>
+                </form>
             </div>
         </div>
 
-        <form action="{% url 'revoke-self' %}" method="post">
-        {% csrf_token %}
-        <button type="submit" class="btn btn-danger">Revoke your access</button>
-        </form>
+        {% if entry.is_admin %}
+            <h3 class="mt-4">Admin actions</h3>
+            <div class="col-auto">
+                <a href="" class="btn btn-warning" data-bs-toggle="tooltip"
+                   title="Disables the current code and generates a new one">Invalidate access code</a>
+
+            </div>
+        {% endif %}
     {% endif %}
 {% endblock %}

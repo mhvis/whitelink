@@ -13,8 +13,8 @@ class WhitelistEntryManager(models.Manager):
     def add(self, **kwargs):
         """Creates a new entry with given parameters and updates the firewall."""
         with transaction.atomic():
-            self.create(**kwargs)
-            self.update_firewall()
+            WhitelistEntry.objects.create(**kwargs)
+            WhitelistEntry.objects.update_firewall()
 
 
 class WhitelistEntry(models.Model):
@@ -30,7 +30,7 @@ class WhitelistEntry(models.Model):
         """Deletes entry and synchronously updates firewall."""
         with transaction.atomic():
             self.delete()
-            self.objects.update_firewall()
+            WhitelistEntry.objects.update_firewall()
 
 
 class WhitelistSettings(models.Model):
