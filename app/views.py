@@ -64,7 +64,8 @@ class IndexView(WhitelistMixin, TemplateView):
             # Set as admin if it's the first entry
             is_admin = WhitelistEntry.objects.count() == 0
             form.add(ip=self.ip, is_admin=is_admin)
-            messages.success(request, "You can now access the server!")
+            messages.success(request,
+                             "You are whitelisted! It can take up to a minute before you can access the server.")
             return redirect('index')
 
         # Re-render form on errors
