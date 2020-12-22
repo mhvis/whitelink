@@ -1,9 +1,10 @@
 # Whitelink
 
-The aim of this project is to provide a private server instance which is only accessible for whitelisted IP addresses, and allow easy registration of the server users using a web interface.
+A tool for restricting server access using an IP based whitelist.
 
-It provides private Impostor and Crewlink server instances which can only be accessed by the whitelisted people,
-giving the following benefits for streamers:
+People that want access to the server visit the web page of this tool where they enter the retrieved access code, after which their IP address is added to the firewall granting access to the service.
+
+The original purpose is for providing private Impostor and Crewlink server instances, with the following benefits for streamers:
 
 * Low ping and high availability, works even when the public Among Us or Crewlink servers are down.
 * No risk of leaking lobby codes, you can even set the lobby to public.
