@@ -6,11 +6,11 @@ A tool for restricting server access using an IP based whitelist.
 
 People that want access to the server visit the web page of this tool where they enter the retrieved access code, after which their IP address is added to the firewall granting access to the service.
 
-The original purpose is for providing private Impostor and Crewlink server instances, with the following benefits for streamers:
+The purpose is for providing private Impostor and CrewLink server instances, with the following advantages:
 
-* Low ping and high availability, works even when the public Among Us or Crewlink servers are down. (Ping depends on geographical location of the server.)
-* No risk of leaking lobby codes, you can even set the lobby to public.
-* No risk of leaking the Crewlink+Impostor server address.
+* Low ping and high availability, works even when the public Among Us or CrewLink servers are down. (Ping depends on geographical location of the server.)
+* No risk of leaking lobby codes, as streamer you can even set the lobby to public.
+* No risk of leaking the CrewLink+Impostor server address.
 
 ## How does it work?
 
@@ -19,18 +19,18 @@ One-time set up:
 1. The host shares the private code with the other players.
 2. The others open this app in their browser and fill in the code to whitelist their IP.
    
-After set up the whitelisted people can access Crewlink and Impostor.
+After set up the whitelisted people can access CrewLink and Impostor.
 
 ## Are you a streamer?
 
 I will gladly set up a beefy CrewLink+Impostor server for you in a nearby cloud region for free!
-DM me on Twitter or Discord or send a mail to _todo_!
+DM me on Discord mhvis#4645 or Twitter [@mhviss](https://twitter.com/mhviss).
 
 ## Demo
 
 A demo runs at [demo.whitelink.mhvis.nl](https://demo.whitelink.mhvis.nl/),
 use access code `whitelink`.
-
+The demo includes a CrewLink instance.
 
 
 ## Development
