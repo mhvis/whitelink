@@ -21,17 +21,6 @@ One-time set up:
    
 After set up the whitelisted people can access CrewLink and Impostor.
 
-## Are you a streamer?
-
-I will gladly set up a beefy CrewLink+Impostor server for you in a nearby cloud region for free!
-DM me on Discord mhvis#4645 or Twitter [@mhviss](https://twitter.com/mhviss).
-
-## Demo
-
-A demo runs at [demo.whitelink.mhvis.nl](https://demo.whitelink.mhvis.nl/),
-use access code `whitelink`.
-The demo includes a CrewLink instance.
-
 
 ## Development
 
